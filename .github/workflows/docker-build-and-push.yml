@@ -9,10 +9,11 @@ on:
 
 jobs:
   build-and-push:
-    name: Build and push Docker image to Docker Hub
+    name: Build and push Docker image
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: write
 
     steps:
       - name: Checkout repository
@@ -24,13 +25,38 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Login to Docker Hub
+      - name: Login to GitHub Container Registry (GHCR)
+        id: ghcr_login
         uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push to GHCR (multi-arch)
+        id: build_push_ghcr
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/car-price-demo:latest
+            ghcr.io/${{ github.repository_owner }}/car-price-demo:${{ github.sha }}
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Attempt Docker Hub login (optional)
+        id: dockerhub_login
+        uses: docker/login-action@v2
+        continue-on-error: true
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push image
+      - name: Build and push to Docker Hub (only if login succeeded)
+        if: ${{ success() && steps.dockerhub_login.conclusion == 'success' }}
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -39,10 +65,18 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/car-price-demo:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/car-price-demo:${{ github.sha }}
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: Confirm pushed image
+      - name: Report image locations
         run: |
-          echo "Pushed image: ${{ secrets.DOCKERHUB_USERNAME }}/car-price-demo:latest"
+          echo "Images pushed to GHCR: ghcr.io/${{ github.repository_owner }}/car-price-demo:latest"
+          if [ "${{ steps.dockerhub_login.conclusion }}" = "success" ]; then
+            echo "Also pushed to Docker Hub: ${{ secrets.DOCKERHUB_USERNAME }}/car-price-demo:latest"
+          else
+            echo "Docker Hub push skipped because Docker Hub login failed or token lacks push scope."
+            echo "To enable Docker Hub pushes, set repository secrets DOCKERHUB_USERNAME and DOCKERHUB_TOKEN (PAT with write/publish scopes)."
+          fi
 
   
