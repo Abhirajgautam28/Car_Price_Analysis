@@ -24,16 +24,16 @@ jobs:
           issue-message: |
             👋 Thanks for opening an issue!
 
-            We appreciate you taking the time to contribute. Please make sure your report includes a clear description, steps to reproduce, and any relevant logs or screenshots.
+            Please add a short description, steps to reproduce, and screenshots if relevant.
 
-            If you're unsure where to start, check our `CONTRIBUTING.md` and `README.md` for guidance.
+            Quick links: CONTRIBUTING.md — https://github.com/${{ github.repository }}/blob/main/CONTRIBUTING.md
 
-            — The maintainers
+            — Gracias / Thank you
           pr-message: |
-            👋 Thanks for your pull request!
+            👋 Thanks for the pull request!
 
-            We appreciate the contribution. Please ensure your PR includes a concise description of the change, a link to any related issue (if applicable), and that tests/linters pass.
+            Add a brief summary, link any related issue, and ensure tests/linters pass.
 
-            If this is your first contribution here, welcome — see `CONTRIBUTING.md` for guidance on how we review PRs.
+            Quick links: README.md — https://github.com/${{ github.repository }}/blob/main/README.md
 
-            — The maintainers
+            — Bienvenido / Welcome
