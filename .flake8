@@ -1,5 +1,5 @@
 [flake8]
 max-line-length = 120
-exclude = .venv,build,dist,__pycache__,scripts/inspect_app_lines.py,scripts/fix_app_linebreaks.py,scripts/check_try_except.py,scripts/match_try_except.py,scripts/print_lines_indent.py
+exclude = .venv,build,dist,__pycache__,scripts/dev
 per-file-ignores =
     tests/*: E402
