@@ -1,5 +1,7 @@
 # Car Price Analysis
 
+[![CI](https://github.com/Abhirajgautam28/Car_Price_Analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/Abhirajgautam28/Car_Price_Analysis/actions/workflows/ci.yml)
+
 Comprehensive exploratory, modeling, and reproducible analysis for predicting used car prices from structured features. This repository hosts the analysis notebook, dataset, documentation, and contributor guidance needed to reproduce experiments and extend the work.
 
 ---
@@ -52,6 +54,20 @@ Run these commands in PowerShell to create an environment and install dependenci
 python -m venv .venv; .\.venv\Scripts\Activate.ps1; python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
+
+Run the Streamlit demo
+
+After installing dependencies and activating your environment, launch the interactive demo with:
+
+```powershell
+python -m streamlit run app.py
+```
+
+Note: using `python -m streamlit run` avoids PATH and shell differences on Windows shells.
+
+Optional dependencies
+
+- `shap` enables richer model explanations (SHAP beeswarm and per-sample contributions). Installing SHAP will increase install time. If you prefer to keep installs small, the app will still run and fall back to model-reported importances or permutation importance when SHAP is unavailable.
 
 If `requirements.txt` is not present, install core dependencies used in the notebook:
 
