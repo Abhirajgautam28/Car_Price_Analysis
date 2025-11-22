@@ -2,7 +2,6 @@ import os
 import sys
 import pandas as pd
 
-# ensure project root is on sys.path so tests import local `scripts` package
 proj_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if proj_root not in sys.path:
     sys.path.insert(0, proj_root)
@@ -11,7 +10,7 @@ from scripts.utils import train_demo_model
 
 
 def test_train_demo_model_basic():
-    # Build a tiny synthetic dataset with expected columns
+
     df = pd.DataFrame(
         {
             "price": [10000, 12000, 9000, 15000],

@@ -5,8 +5,6 @@ seaborn
 scikit-learn>=1.0
 joblib
 streamlit>=1.10
-# Optional: SHAP enables richer explanations (beeswarm, per-sample contributions).
-# Installing SHAP increases install time; the app will fall back to other methods if SHAP is not present.
 shap
 plotly
 pytest
