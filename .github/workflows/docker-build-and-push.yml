@@ -85,8 +85,8 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ toLower(github.repository_owner) }}/car-price-demo:latest
-            ghcr.io/${{ toLower(github.repository_owner) }}/car-price-demo:${{ github.sha }}
+            ghcr.io/${{ steps.vars.outputs.owner_lower }}/car-price-demo:latest
+            ghcr.io/${{ steps.vars.outputs.owner_lower }}/car-price-demo:${{ github.sha }}
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -107,17 +107,17 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ toLower(secrets.DOCKERHUB_USERNAME) }}/car-price-demo:latest
-            ${{ toLower(secrets.DOCKERHUB_USERNAME) }}/car-price-demo:${{ github.sha }}
+            ${{ steps.vars.outputs.dockerhub_user_lower }}/car-price-demo:latest
+            ${{ steps.vars.outputs.dockerhub_user_lower }}/car-price-demo:${{ github.sha }}
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Report image locations
         run: |
-          echo "Images pushed to GHCR: ghcr.io/${{ toLower(github.repository_owner) }}/car-price-demo:latest"
+          echo "Images pushed to GHCR: ghcr.io/${{ steps.vars.outputs.owner_lower }}/car-price-demo:latest"
           if [ "${{ steps.dockerhub_login.conclusion }}" = "success" ]; then
-            echo "Also pushed to Docker Hub: ${{ toLower(secrets.DOCKERHUB_USERNAME) }}/car-price-demo:latest"
+            echo "Also pushed to Docker Hub: ${{ steps.vars.outputs.dockerhub_user_lower }}/car-price-demo:latest"
           else
             echo "Docker Hub push skipped because Docker Hub login failed or token lacks push scope."
             echo "To enable Docker Hub pushes, set repository secrets DOCKERHUB_USERNAME and DOCKERHUB_TOKEN (PAT with write/publish scopes)."
