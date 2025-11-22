@@ -1,0 +1,11 @@
+numpy>=1.21
+pandas>=1.3
+matplotlib
+seaborn
+scikit-learn>=1.0
+joblib
+streamlit>=1.10
+# NOTE: SHAP intentionally omitted for CI to keep installs fast
+plotly
+pytest
+flake8
