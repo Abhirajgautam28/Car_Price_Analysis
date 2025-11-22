@@ -1,29 +1,11 @@
-name: CI
+name: Deprecated CI (now merged)
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  build:
+  deprecated:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - name: Install dependencies (CI-friendly)
-        run: |
-          python -m pip install --upgrade pip
-          # install core requirements without heavy optional deps (e.g., shap)
-          pip install -r requirements-ci.txt
-          pip install pytest flake8
-      - name: Lint (flake8)
-        run: |
-          flake8 scripts tests
-      - name: Run tests
-        run: |
-          pytest -q
+      - name: No-op
+        run: echo "This workflow is deprecated. See .github/workflows/docker-build-and-push.yml for the merged CI+Docker workflow."
