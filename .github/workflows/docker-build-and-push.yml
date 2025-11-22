@@ -99,8 +99,32 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push to Docker Hub (only if login succeeded)
-        if: ${{ success() && steps.dockerhub_login.conclusion == 'success' }}
+      - name: Check Docker Hub push permission
+        id: check_dh_push
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          # If no Docker Hub credentials provided, mark push as not OK
+          if [ -z "$DOCKERHUB_USERNAME" ] || [ -z "$DOCKERHUB_TOKEN" ]; then
+            echo "push_ok=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          # Compose repo path that we will try to get a push token for
+          REPO="${{ steps.vars.outputs.dockerhub_user_lower }}/car-price-demo"
+          # Basic auth header
+          AUTH=$(printf '%s:%s' "$DOCKERHUB_USERNAME" "$DOCKERHUB_TOKEN" | base64)
+          # Try to fetch a token that includes push scope; auth.docker.io returns 200 for success
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Basic $AUTH" "https://auth.docker.io/token?service=registry.docker.io&scope=repository:${REPO}:pull,push")
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "push_ok=true" >> $GITHUB_OUTPUT
+          else
+            echo "push_ok=false" >> $GITHUB_OUTPUT
+            echo "dockerhub_push_check_http=$HTTP_CODE" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Build and push to Docker Hub (only if login succeeded and token allows push)
+        if: ${{ success() && steps.dockerhub_login.conclusion == 'success' && steps.check_dh_push.outputs.push_ok == 'true' }}
         uses: docker/build-push-action@v4
         with:
           context: .
