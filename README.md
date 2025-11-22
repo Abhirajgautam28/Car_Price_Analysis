@@ -132,5 +132,3 @@ This repository is released under the MIT License. See `LICENSE` for details.
 For questions about the repository or to report concerns, contact: `abhirajgautam28@gmail.com`.
 
 ---
-
-If you would like, I can also generate a `requirements.txt` that reflects the libraries used in the notebook and a small script to train and save the best model outside the notebook.
