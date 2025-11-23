@@ -1,7 +1,4 @@
 # Car Price Analysis
-
-[![CI](https://github.com/Abhirajgautam28/Car_Price_Analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/Abhirajgautam28/Car_Price_Analysis/actions/workflows/ci.yml)
-
 Comprehensive exploratory, modeling, and reproducible analysis for predicting used car prices from structured features. This repository hosts the analysis notebook, dataset, documentation, and contributor guidance needed to reproduce experiments and extend the work.
 
 ---
